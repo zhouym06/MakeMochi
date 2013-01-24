@@ -1,10 +1,11 @@
 package Utils
 {
 	import flash.media.Sound;
-
+	
 	public class Sounds
 	{
 		private static var inited:Boolean = false;
+		private static var soundOn:Boolean = true;
 		
 		private static var SoundA_BPM80:Array = new Array(8);
 		private static var SoundB_BPM80:Array = new Array(8);
@@ -22,7 +23,6 @@ package Utils
 		
 		public function Sounds()
 		{
-			Init();
 		}
 		private static function Init():void
 		{
@@ -80,6 +80,37 @@ package Utils
 			
 		}
 
+		public static function SetSoundOn(isOn:Boolean):void
+		{
+			soundOn = isOn;
+		}
+		public static function PlayBeginSound():void
+		{
+			if(soundOn)
+				GetBeginSound().play();
+		}
+		public static function PlayEndSound():void
+		{
+			if(soundOn)
+			GetEndSound().play();
+		}
+		public static function PlayHaiYouSound():void
+		{
+			if(soundOn)
+				GetHaiYouSound().play();
+		}
+		public static function PlayHammerSound(inteval:int, left:Boolean):void
+		{
+			if(soundOn)
+				GetHammerSound(inteval, left).play();
+		}
+		public static function PlayHandSound(inteval:int):void
+		{
+			if(soundOn)
+				GetHandSound(inteval).play();
+		}
+		
+		
 		public static function GetBeginSound():Sound
 		{
 			Init();
@@ -99,25 +130,25 @@ package Utils
 		public static function GetHammerSound(inteval:int, left:Boolean):Sound
 		{
 			Init();
-			Debugger.Print("GetHammerSound");
+			//Debugger.Print("GetHammerSound");
 			
 			var randomIndex:int = 1;
-			switch(Constants.getSpeedIndex(inteval))
+			switch(Tools.GetSpeedIndex(inteval))
 			{
 				case 1:
 					
 					randomIndex = Math.floor(Math.random() * 8);
-					Debugger.Append("1:" + randomIndex + "\n");
+					//Debugger.Append("1:" + randomIndex + "\n");
 					return SoundA_BPM80[randomIndex];
 					break;
 				case 2:
 					randomIndex = Math.floor(Math.random() * 4);
-					Debugger.Append("2:" + randomIndex + "\n");
+					//Debugger.Append("2:" + randomIndex + "\n");
 					return SoundA_BPS2[randomIndex];
 					break;
 				case 3:
 					randomIndex = Math.floor(Math.random() * 4);
-					Debugger.Append("3:" + randomIndex + "\n");
+					//Debugger.Append("3:" + randomIndex + "\n");
 					if(left)
 						return SoundA_BPS5[randomIndex];
 					return SoundB_BPS5[randomIndex];
@@ -128,24 +159,24 @@ package Utils
 		public static  function GetHandSound(inteval:int):Sound
 		{
 			Init();
-			Debugger.Print("GetHandSound");
+			//Debugger.Print("GetHandSound");
 			
 			var randomIndex:int = 1;
-			switch(Constants.getSpeedIndex(inteval))
+			switch(Tools.GetSpeedIndex(inteval))
 			{
 				case 1:
 					randomIndex = Math.floor(Math.random() * 8);
-					Debugger.Append("1:" + randomIndex + "\n");
+					//Debugger.Append("1:" + randomIndex + "\n");
 					return SoundB_BPM80[randomIndex];
 					break;
 				case 2:
 					randomIndex = Math.floor(Math.random() * 4);
-					Debugger.Append("2:" + randomIndex + "\n");
+					//Debugger.Append("2:" + randomIndex + "\n");
 					return SoundB_BPS2[randomIndex];
 					break;
 				case 3:
 					randomIndex = Math.floor(Math.random() * 4);
-					Debugger.Append("3:" + randomIndex + "\n");
+					//Debugger.Append("3:" + randomIndex + "\n");
 					return SoundC_BPS5[randomIndex];
 					break;
 			}

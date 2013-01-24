@@ -4,8 +4,8 @@ package Utils
 	{
 		import flash.text.*;
 		
-		public static var debugging:Boolean = true;
-		//public static var debugging:Boolean = false;
+		//public static var debugging:Boolean = true;
+		public static var debugging:Boolean = false;
 		private static var debugTextField:TextField;
 		
 		public function Debugger()

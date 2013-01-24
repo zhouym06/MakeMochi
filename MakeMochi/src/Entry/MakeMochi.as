@@ -15,7 +15,8 @@ package Entry
 		private var _op:MovieClip = null;
 		private var _about:MovieClip = null;
 		private var _help:MovieClip = null;
-		private var _gameStage:MovieClip = null;
+		private var _gameStage:_GameStage = null;
+		private var _end:MovieClip = null;
 		
 		public function MakeMochi()
 		{
@@ -29,6 +30,7 @@ package Entry
 			hide(_about);
 			hide(_help);
 			hide(_gameStage);
+			hide(_end);
 			
 			switch(e.GetToPage())
 			{
@@ -53,12 +55,14 @@ package Entry
 					addChild(_op);
 					break;
 				case MoChiEvent.TO_GAME:
-					if(_gameStage != null)
+					if(_gameStage != null && e.GetFromPage() == MoChiEvent.FROM_HELP)
 					{
 						_gameStage.visible = true;
 						_gameStage.Continue();
 						break;
 					}
+					if(_gameStage != null)
+						removeChild(_gameStage);
 					_gameStage = new _GameStage(stage.stageWidth, stage.stageHeight);
 					_gameStage.addEventListener(MoChiEvent.TRANSFER_PAGE, transPage);
 					addChild(_gameStage);
@@ -79,6 +83,10 @@ package Entry
 					_help = new _HelpPage(stage.stageWidth, stage.stageHeight);
 					_help.addEventListener(MoChiEvent.TRANSFER_PAGE, transPage);
 					addChild(_help);
+				case MoChiEvent.TO_END:
+					_end = new _EndPage(stage.stageWidth, stage.stageHeight,e.GetScore(), e.GetDead());
+					_end.addEventListener(MoChiEvent.TRANSFER_PAGE, transPage);
+					addChild(_end);
 			}
 			
 			if(Debugger.debugging)
@@ -91,6 +99,11 @@ package Entry
 		{
 			if(mc != null)
 				mc.visible = false;
+		}
+		private function remove(mc:MovieClip):void
+		{
+			if(mc != null)
+				removeChild(mc);
 		}
 		private function addOP():void
 		{

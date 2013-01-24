@@ -26,8 +26,13 @@ package Pages
 			(getChildAt(1) as TextField).autoSize="left";
 			(getChildAt(1) as TextField).wordWrap=true;
 			(getChildAt(1) as TextField).multiline=true;
-			(getChildAt(1) as TextField).htmlText = "" +
-				"		AAAAAAAAAAAAAAAAAA.\n";
+			(getChildAt(1) as TextField).htmlText = " You will need to roll over the rice with wet hand. Watch out for the Hammers. " + 
+				"If you are hit by the hammer, you will lose health. " +
+					"But if you roll the rice at the right time, you will earn points." +
+					"Win more points and health point by Combo. " +
+					"But the hammer speed will also go up when you are comboing.";
+			(getChildAt(1) as TextField).selectable = false;
+			//(getChildAt(2) as TextField).selectable = false;
 			//Button
 			getChildAt(3).addEventListener(MouseEvent.CLICK, BackButtonClicked);
 			
