@@ -54,6 +54,8 @@ package Pages
 					mochiMade = new MoChi_4();
 				else
 					mochiMade = new MoChi_5();
+				mochiMade.width = 0.3 * width;
+				mochiMade.height = 0.3 * height;
 				addChild(mochiMade)
 			}
 			

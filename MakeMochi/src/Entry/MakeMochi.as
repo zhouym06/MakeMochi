@@ -48,6 +48,8 @@ package Entry
 					if(_op != null)
 					{
 						_op.visible = true;
+						if(e.GetFromPage() == MoChiEvent.FROM_END)
+							_op.play();
 						break;
 					}
 					_op = new _Opening(stage.stageWidth, stage.stageHeight);

@@ -26,7 +26,7 @@ package Pages
 			(getChildAt(1) as TextField).autoSize="left";
 			(getChildAt(1) as TextField).wordWrap=true;
 			(getChildAt(1) as TextField).multiline=true;
-			(getChildAt(1) as TextField).htmlText = " You will need to roll over the rice with wet hand. Watch out for the Hammers. " + 
+			(getChildAt(1) as TextField).htmlText = " Click the motar to roll over the rice with wet hand. Watch out for the Hammers. " + 
 				"If you are hit by the hammer, you will lose health. " +
 					"But if you roll the rice at the right time, you will earn points." +
 					"Win more points and health point by Combo. " +

@@ -20,6 +20,8 @@ package Utils
 		private static var BeginSound:Sound = null;
 		private static var EndSound:Sound = null;
 		private static var HaiYouSound:Sound = null;
+		private static var OpeningBGMSound:Sound = null;
+		
 		
 		public function Sounds()
 		{
@@ -33,6 +35,7 @@ package Utils
 			BeginSound = new begin();
 			EndSound = new end();
 			HaiYouSound = new HaiYou();
+			OpeningBGMSound = new openingBGM();
 			
 			SoundA_BPM80[0] = new BPM80A1();
 			SoundA_BPM80[1] = new BPM80A2();
@@ -84,6 +87,12 @@ package Utils
 		{
 			soundOn = isOn;
 		}
+		
+		public static function PlayOpeningBGM():void
+		{
+			if(soundOn)
+				GetOpeningBGM().play();
+		}
 		public static function PlayBeginSound():void
 		{
 			if(soundOn)
@@ -111,6 +120,11 @@ package Utils
 		}
 		
 		
+		public static function GetOpeningBGM():Sound
+		{
+			Init();
+			return OpeningBGMSound;
+		}
 		public static function GetBeginSound():Sound
 		{
 			Init();

@@ -130,6 +130,8 @@ package GameStage
 			mainTimer.start();
 			countDownTimer.start();
 		}
+		
+		
 		public function Pause():void
 		{
 			playing = false;
@@ -193,6 +195,8 @@ package GameStage
 		private function HandleEnd(dead:Boolean):void
 		{
 			Pause();
+			Sounds.PlayEndSound();
+			
 			var end:MoChiEvent = new MoChiEvent(MoChiEvent.TRANSFER_PAGE);
 			end.SetToPage(MoChiEvent.TO_END);
 			end.SetFromPage(MoChiEvent.FROM_GAME);

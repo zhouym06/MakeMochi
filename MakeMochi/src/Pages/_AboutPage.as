@@ -33,6 +33,7 @@ package Pages
 				+
 				"		Since time is limited in 2 weeks and I am disabled with art. I was useing any resources I can find from the internet." +
 				"Please inform me if any right is infringed.\n";
+			(getChildAt(1) as TextField).selectable = false;
 			//Button
 			getChildAt(3).addEventListener(MouseEvent.CLICK, BackButtonClicked);
 		}
