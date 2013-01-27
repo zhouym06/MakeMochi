@@ -6,7 +6,7 @@ package Pages
 	import Utils.*;
 	
 	
-	public class _AboutPage extends AboutPage
+	public class _AboutPage extends InfoPage
 	{
 		public function _AboutPage(w:int, h:int)
 		{
@@ -15,6 +15,11 @@ package Pages
 			height = h;
 			x = w / 2;
 			y = h / 2;
+			
+			//Title
+			(getChildAt(2) as TextField).text = "About Make Mochi";
+			(getChildAt(2) as TextField).selectable = false;
+			(getChildAt(2) as TextField).autoSize = "center";
 			//Text
 			(getChildAt(1) as TextField).autoSize="left";
 			(getChildAt(1) as TextField).wordWrap=true;
@@ -22,7 +27,7 @@ package Pages
 			(getChildAt(1) as TextField).htmlText = "" +
 				"		Mochi is a traditional food for the Japanese New Year. It is made of sticky rice and needs quite a lot of beating and rubbing. " + 
 				"Workers using traditional methods take heavy physical labour and developed their art. " +
-				"They can pound the paste with a hammer and rub it at the same time in an incredible speed. " +
+				"They can pound the rice with a hammer and rub it at the same time in an incredible speed. " +
 				"Read more in <a href='http://en.wikipedia.org/wiki/Rice_cake'>Wikipedia</a> and " +
 				"<a href='http://www.youtube.com/results?search_query=fast+mochi'>Youtube</a>.\n"
 				+

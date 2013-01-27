@@ -4,12 +4,14 @@ package GameStage
 	
 	import flash.display.*;
 	import flash.events.*;
-	import flash.media.Sound;
+	import flash.media.*;
 	import flash.text.*;
 	import flash.utils.*;
+	
 
 	public class _GameStage extends GameStage
 	{
+		
 		//status
 		private var playing:Boolean = false;
 		private var inteval:int = Constants.INIT_INTEVAL;
@@ -28,6 +30,7 @@ package GameStage
 		private var backTimer:Timer = null;
 		private var countDownTimer:Timer = null;
 		
+		private var bgmChannel:SoundChannel = null;
 		
 		//components
 		private var _Hammer5:MovieClip = null;
@@ -64,11 +67,13 @@ package GameStage
 			y = h * 0.52;
 			//debugger
 			Debugger.getDebugger().y = h * 0.3;		//for not blocking buttons
+			/*
 			Debugger.Print("");
 			for(var i:int = 0; i < 25; i++)
 			{
 				Debugger.Append(i + ":" + (getChildAt(i)).toString() + "\n");
 			}
+			*/
 			//hammers
 			_Hammer5 = getChildAt(12) as MovieClip;
 			_Hammer24 = getChildAt(10) as MovieClip;
@@ -83,6 +88,7 @@ package GameStage
 			(_MoChiHead.getChildAt(1) as TextField).selectable = false;
 			refreshScore();
 			refreshTime();
+			refreshLife();
 			
 			//motars
 			_ClickZone = getChildAt(24) as SimpleButton;
@@ -94,14 +100,19 @@ package GameStage
 			_PauseButton = getChildAt(23) as SimpleButton;
 			_GAAboutButton = getChildAt(0) as SimpleButton;
 			_GAHelpButton = getChildAt(22) as SimpleButton;
-			_SoundOnButton = getChildAt(20) as SimpleButton;
-			_SoundOffButton = getChildAt(21) as SimpleButton;
+			//_SoundOnButton = getChildAt(20) as SimpleButton;
+			//_SoundOffButton = getChildAt(21) as SimpleButton;
+			_SoundOnButton = getChildAt(21) as SimpleButton;
+			_SoundOffButton = getChildAt(20) as SimpleButton;
 			_Speed1Button = getChildAt(2) as SimpleButton;
 			_Speed2Button = getChildAt(1) as SimpleButton;
 			
 			_GAAboutButton.visible = false;
 			_Speed2Button.visible = false;
-			_SoundOnButton.visible = false;
+			if(Sounds.IsOn())
+				_SoundOnButton.visible = false;
+			else
+				_SoundOffButton.visible = false;
 			_RiceAfter.visible = false;
 			_RiceBefore.visible = false;
 			
@@ -152,8 +163,8 @@ package GameStage
 				inteval -= 2;
 			else
 				inteval *= 0.8;
-			if(inteval < 25)
-				inteval = 25;
+			if(inteval < Constants.FASTEST_INTEVAL)
+				inteval = Constants.FASTEST_INTEVAL;
 			mainTimer.stop();
 			mainTimer = new Timer(inteval);
 			mainTimer.addEventListener("timer", MainTimeUp);
@@ -169,8 +180,8 @@ package GameStage
 			else
 				inteval *= 1.2;
 			
-			if(inteval > 90)
-				inteval = 90;
+			if(inteval > Constants.SLOWEST_INTEVAL)
+				inteval = Constants.SLOWEST_INTEVAL;
 			mainTimer.stop();
 			mainTimer = new Timer(inteval);
 			mainTimer.addEventListener("timer", MainTimeUp);
@@ -181,8 +192,10 @@ package GameStage
 		private function HandleHit():void
 		{
 			//Debugger.Print("HandleHit");
+			Sounds.PlayHitSound();
 			_Hands.gotoAndStop(1);
 			SpeedDown();
+			
 			ComboRoll = 0;
 			if(life > 0)
 			{
@@ -203,6 +216,7 @@ package GameStage
 			end.SetScore(score);
 			end.SetDead(dead);
 			dispatchEvent(end);
+			stopBGM();
 		}
 		private function refreshTime():void
 		{
@@ -225,6 +239,7 @@ package GameStage
 		{
 			//Debugger.Print("BackTimeUp:" + e.toString());
 			playing = true;
+			playBGM();
 			_PauseButton.addEventListener(MouseEvent.CLICK, PauseButtonClicked);
 		}
 		private function CountDownTimeUp(e:TimerEvent):void
@@ -308,14 +323,18 @@ package GameStage
 			}
 			if(_RiceAfter.visible == false)
 			{
+				
 				ComboMiss = 0;
 				ComboRoll++;
 				if(ComboRoll > 1)
+				{
 					SpeedUp();
-				if(ComboRoll > 10)
+				}
+				if(ComboRoll > 2 && (ComboRoll % 5 == 0))
 				{
 					life++;
 					refreshLife();
+					Sounds.PlayRollSound();
 				}
 				score += ComboRoll;
 				refreshScore();
@@ -326,10 +345,11 @@ package GameStage
 		}
 		private function UpRice(e:MouseEvent):void
 		{
+			_Hands.gotoAndStop(2);
 			if(!playing)
 				return;
 			//Debugger.Print("UpRice:");
-			_Hands.gotoAndStop(2);
+			
 		}
 		
 		
@@ -341,6 +361,7 @@ package GameStage
 			aButClickedEvent.SetToPage(MoChiEvent.TO_HELP);
 			aButClickedEvent.SetFromPage(MoChiEvent.FROM_GAME);
 			dispatchEvent(aButClickedEvent);
+			stopBGM();
 		}
 		
 		private function Speed1ButtonClicked(e:MouseEvent):void
@@ -362,6 +383,7 @@ package GameStage
 			if(playing)
 			{
 				Pause();
+				stopBGM();
 			}
 			else
 			{
@@ -375,6 +397,7 @@ package GameStage
 			_SoundOnButton.visible = false;
 			_SoundOffButton.visible = true;
 			Sounds.SetSoundOn(true);
+			playBGM();
 			
 		}
 		private function SoundOffButtonClicked(e:MouseEvent):void
@@ -383,6 +406,32 @@ package GameStage
 			_SoundOnButton.visible = true;
 			_SoundOffButton.visible = false;
 			Sounds.SetSoundOn(false);
+			stopBGM();
+		}
+		private function playBGM():void
+		{
+			if(Sounds.IsOn())
+			{
+				if(bgmChannel == null)
+				{
+					bgmChannel = Sounds.GetGameBGM().play(0, int.MAX_VALUE);
+					var st:SoundTransform = new SoundTransform();
+					st.volume = 0.3;
+					bgmChannel.soundTransform = st;
+				}
+				else
+				{
+					bgmChannel.stop();
+					bgmChannel = Sounds.GetGameBGM().play(bgmChannel.position,int.MAX_VALUE);
+				}
+			}
+		}
+		private function stopBGM():void
+		{
+			if(bgmChannel != null)
+			{
+				bgmChannel.stop();
+			}
 		}
 		
 	}

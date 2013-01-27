@@ -9,13 +9,15 @@ package Pages
 	import flash.text.*;
 	
 	import mx.managers.*;
-
 //	import mx.managers.CursorManager;
 	
 	public class _Opening extends Opening
 	{
 		private var bgm:Sound = null;
 		private var bgmChannel:SoundChannel = null;
+		
+		[Embed(source="Res/mallet_cursor.gif")]  
+		private var hitCursor:Class;  
 		
 		public function _Opening(w:int, h:int)
 		{
@@ -44,10 +46,24 @@ package Pages
 				//StartButton
 				// todo?: use  (getChildByName("sButton") as SimpleButton) instead...I set Name In Flash CS4 but can't get here...
 				getChildAt(10).addEventListener(MouseEvent.CLICK, StartButtonClicked);
+				
+				getChildAt(10).addEventListener(MouseEvent.MOUSE_OVER, ButtonOn);
+				getChildAt(10).addEventListener(MouseEvent.MOUSE_OUT, ButtonOut);
 				//AboutButton
 				// todo?: use  (getChildByName("aButton") as SimpleButton) instead...I set Name In Flash CS4 but can't get here...
 				getChildAt(9).addEventListener(MouseEvent.CLICK, AboutButtonClicked);
+				
+				getChildAt(9).addEventListener(MouseEvent.MOUSE_OVER, ButtonOn);
+				getChildAt(9).addEventListener(MouseEvent.MOUSE_OUT, ButtonOut);
 			}
+		}
+		public function ButtonOn(e:MouseEvent):void
+		{
+			//CursorManager.setCursor(hitCursor);
+		}
+		public function ButtonOut(e:MouseEvent):void
+		{
+			//CursorManager.removeAllCursor();  
 		}
 		public function StartButtonClicked(e:MouseEvent):void
 		{
@@ -56,9 +72,9 @@ package Pages
 			sButClickedEvent.SetToPage(MoChiEvent.TO_GAME);
 			sButClickedEvent.SetFromPage(MoChiEvent.FROM_OP);
 			dispatchEvent(sButClickedEvent);
-			Sounds.PlayHaiYouSound();
+			
 			bgmChannel.stop();
-			//bgm.close();
+			//CursorManager.removeAllCursor();
 		}
 		
 		public function AboutButtonClicked(e:MouseEvent):void
@@ -68,7 +84,7 @@ package Pages
 			aButClickedEvent.SetToPage(MoChiEvent.TO_ABOUT);
 			aButClickedEvent.SetFromPage(MoChiEvent.FROM_OP);
 			dispatchEvent(aButClickedEvent);
-			
+			//CursorManager.removeAllCursor();
 		}
 		public function playBGM():void
 		{

@@ -21,7 +21,10 @@ package Utils
 		private static var EndSound:Sound = null;
 		private static var HaiYouSound:Sound = null;
 		private static var OpeningBGMSound:Sound = null;
-		
+		private static var Roll:Sound = null;
+		private static var Hit:Sound = null;
+		private static var Clear:Sound = null;
+		private static var GameBGMSound:Sound = null;
 		
 		public function Sounds()
 		{
@@ -32,10 +35,14 @@ package Utils
 				return;
 			Debugger.Print("Init\n");
 			
-			BeginSound = new begin();
-			EndSound = new end();
-			HaiYouSound = new HaiYou();
+			BeginSound 		= new begin();
+			EndSound 		= new end();
+			HaiYouSound 	= new HaiYou();
 			OpeningBGMSound = new openingBGM();
+			Roll			= new RollSound();
+			Hit				= new HitSound();
+			Clear			= new clearSound();
+			GameBGMSound	= new GameBGM();
 			
 			SoundA_BPM80[0] = new BPM80A1();
 			SoundA_BPM80[1] = new BPM80A2();
@@ -87,6 +94,10 @@ package Utils
 		{
 			soundOn = isOn;
 		}
+		public static function IsOn():Boolean
+		{
+			return soundOn;
+		}
 		
 		public static function PlayOpeningBGM():void
 		{
@@ -101,7 +112,7 @@ package Utils
 		public static function PlayEndSound():void
 		{
 			if(soundOn)
-			GetEndSound().play();
+				GetEndSound().play();
 		}
 		public static function PlayHaiYouSound():void
 		{
@@ -118,7 +129,32 @@ package Utils
 			if(soundOn)
 				GetHandSound(inteval).play();
 		}
-		
+		public static function PlayRollSound():void
+		{
+			if(soundOn)
+				GetRollSound().play();
+		}
+		public static function PlayHitSound():void
+		{
+			if(soundOn)
+				GetHitSound().play();
+		}
+		public static function PlayClearSound():void
+		{
+			if(soundOn)
+				GetClearSound().play();
+		}
+		public static function PlayGameBGM():void
+		{
+			if(soundOn)
+				GetGameBGM().play();
+		}
+		public static function GetGameBGM():Sound
+		{
+			
+			Init();
+			return GameBGMSound;
+		}
 		
 		public static function GetOpeningBGM():Sound
 		{
@@ -139,6 +175,21 @@ package Utils
 		{
 			Init();
 			return HaiYouSound;
+		}
+		public static function GetRollSound():Sound
+		{
+			Init();
+			return Roll;
+		}
+		public static function GetHitSound():Sound
+		{
+			Init();
+			return Hit;
+		}
+		public static function GetClearSound():Sound
+		{
+			Init();
+			return Clear;
 		}
 		
 		public static function GetHammerSound(inteval:int, left:Boolean):Sound
